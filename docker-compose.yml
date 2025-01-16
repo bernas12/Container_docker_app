@@ -1,12 +1,21 @@
 version: "3.8"
 
 services:
+  frontend:
+    build:
+      context: ./Nginx_frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
   app:
     build:
       context: ./Flask_app
     container_name: app
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     environment:
       DB_HOST: database
       DB_PORT: 3306

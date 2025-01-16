@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request
 import mysql.connector
+from flask_cors import CORS
 
 app = Flask(__name__)
 
+#enable CORS to solve DNS problems
+CORS(app)
+
 #setting up the home page of the frontend
-@app.route('/')
-def frontend_page():
-    return render_template('index.html')
+#@app.route('/')
+#def frontend_page():
+    #return render_template('index.html')
 
 #get the data from the POST request
 @app.route('/submit', methods=['POST'])
@@ -59,14 +63,16 @@ def submit_data():
             NofSites INT,
             UpgradeVersion VARCHAR(255),
             Remarks VARCHAR(255)
-        )
+        );
         """
         cursor.execute(create_table_query)
+        #cursor.fetchall()
 
         # Insert the data into the database
-        insert_query = "INSERT INTO metrics (NofNodes, Market, Country, Customer, Activity, Product, Site, NofSites, UpgradeVersion, Remarks) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        insert_query = "INSERT INTO metrics (NofNodes, Market, Country, Customer, Activity, Product, Site, NofSites, UpgradeVersion, Remarks) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
         values = (n_of_nodes, market, country, customer, activity, product, site, n_of_sites, upgrade_version, remarks)
         cursor.execute(insert_query, values)
+        #cursor.fetchall()
 
         # Commit the changes to the database
         connection.commit()
@@ -81,4 +87,4 @@ def submit_data():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)

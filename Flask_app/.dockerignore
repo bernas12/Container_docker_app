@@ -1,0 +1,5 @@
+# Ignore templates directory
+templates/
+
+# Ignore files
+*.md
