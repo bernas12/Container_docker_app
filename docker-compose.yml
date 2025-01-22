@@ -6,9 +6,11 @@ services:
       context: ./Nginx_frontend
     container_name: frontend
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - app
+    networks:
+      - frontend_net
 
   app:
     build:
@@ -24,6 +26,8 @@ services:
       DB_NAME: metrics
     depends_on:
       - database
+    networks:
+      - frontend_net
   
   database:
     image: mysql:8.0
@@ -35,6 +39,12 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - frontend_net
 
 volumes:
   db_data:
+
+networks:
+  frontend_net:
+    driver: bridge
